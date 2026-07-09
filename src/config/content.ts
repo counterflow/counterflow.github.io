@@ -3,16 +3,15 @@ export const siteConfig = {
   title: "Counterflow",
   description: "A showcase of my work and thoughts",
   social: {
-    github: "https://github.com/tomcomtang/astro-multiplepage-portfolio",
-    twitter: "https://x.com/astrodotbuild",
-    email: "mailto:364786053@qq.com",
+    github: "https://github.com/counterflow",
+    linkedin: "https://www.linkedin.com/in/ianf/",
   },
 };
 
 export const homeContent = {
   title: "Hi, I'm Ian F",
   description:
-    "AI Native software engineer and technical lead who turns complex problems into clean, shippable software.",
+    "AI Native systems engineer who turns complex problems into clean, shippable software.",
   buttons: {
     about: {
       text: "View About",
