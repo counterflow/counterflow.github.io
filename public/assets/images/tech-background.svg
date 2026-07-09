@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes scale {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    .radar {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      opacity: 0.08;
+      animation: scale 10s ease-in-out infinite;
+    }
+    .radar-fill {
+      fill: currentColor;
+      opacity: 0.05;
+    }
+    @media (prefers-color-scheme: dark) {
+      .radar, .radar-fill { stroke: white; fill: white; }
+    }
+    @media (prefers-color-scheme: light) {
+      .radar, .radar-fill { stroke: black; fill: black; }
+    }
+  </style>
+
+  <!-- Radar Chart -->
+  <g transform="translate(270, 400)">
+    <!-- Radar Grid -->
+    <g>
+      <polygon class="radar" points="0,-200 173.2,-100 173.2,100 0,200 -173.2,100 -173.2,-100" />
+      <polygon class="radar" points="0,-150 129.9,-75 129.9,75 0,150 -129.9,75 -129.9,-75" />
+      <polygon class="radar" points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" />
+      <polygon class="radar" points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" />
+    </g>
+
+    <!-- Radar Fill -->
+    <polygon class="radar-fill" points="0,-180 155.9,-90 155.9,90 0,180 -155.9,90 -155.9,-90" />
+    
+    <!-- Radar Lines -->
+    <g>
+      <line class="radar" x1="0" y1="0" x2="0" y2="-200" />
+      <line class="radar" x1="0" y1="0" x2="173.2" y2="-100" />
+      <line class="radar" x1="0" y1="0" x2="173.2" y2="100" />
+      <line class="radar" x1="0" y1="0" x2="0" y2="200" />
+      <line class="radar" x1="0" y1="0" x2="-173.2" y2="100" />
+      <line class="radar" x1="0" y1="0" x2="-173.2" y2="-100" />
+    </g>
+  </g>
+</svg> 

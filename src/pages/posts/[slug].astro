@@ -1,0 +1,219 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Navigation from "../../components/Navigation.astro";
+import Footer from "../../components/Footer.astro";
+import { getPostBySlug, getAllPostSlugs } from "../../utils/getPosts";
+
+export async function getStaticPaths() {
+  const slugs = getAllPostSlugs();
+  return slugs.map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect("/posts/");
+}
+
+const post = getPostBySlug(slug);
+
+if (!post) {
+  return Astro.redirect("/posts/");
+}
+
+const { frontmatter, Content } = post;
+
+if (!Content) {
+  console.error(`Content component not found for slug: ${slug}`);
+  return Astro.redirect("/posts/");
+}
+
+const pageTitle = `${frontmatter.title} - Counterflow`;
+const ogImage = frontmatter.image || "/assets/images/posts/post1.jpg";
+const canonicalURL = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : Astro.url.href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: frontmatter.title,
+  description: frontmatter.description,
+  datePublished: frontmatter.date,
+  image: Astro.site ? new URL(ogImage, Astro.site).href : ogImage,
+  author: { "@type": "Person", name: "Ian Faigao" },
+  mainEntityOfPage: { "@type": "WebPage", "@id": canonicalURL },
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title={pageTitle}
+      description={frontmatter.description}
+      image={ogImage}
+      type="article"
+      publishedTime={frontmatter.date}
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>
+      (function () {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const initialTheme =
+          savedTheme === "system"
+            ? prefersDark
+              ? "dark"
+              : "light"
+            : savedTheme;
+
+        if (initialTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => {
+            if (localStorage.getItem("theme") === "system") {
+              if (e.matches) {
+                document.documentElement.classList.add("dark");
+              } else {
+                document.documentElement.classList.remove("dark");
+              }
+            }
+          });
+
+        const proseContainer = document.querySelector(".prose");
+        if (proseContainer) {
+          const firstH1 = proseContainer.querySelector("h1");
+          if (firstH1) {
+            firstH1.remove();
+          }
+        }
+      });
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-x: hidden;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      main {
+        flex: 1;
+      }
+      section[class*="text-gray-700"] {
+        margin: 0;
+        padding: 0;
+        flex-shrink: 0;
+      }
+      .prose h1:first-of-type,
+      .prose > h1:first-child,
+      article .prose h1:first-child {
+        display: none !important;
+      }
+
+      .dot-hexagon-light {
+        background-image: radial-gradient(
+            circle,
+            #80808045 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #80808045 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+
+      .dot-hexagon-dark {
+        background-image: radial-gradient(
+            circle,
+            #ffffff35 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #ffffff35 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+    </style>
+  </head>
+  <body class="bg-white dark:bg-neutral-900 transition-colors duration-300">
+    <div class="fixed inset-0 z-0 pointer-events-none">
+      <div
+        class="absolute inset-0 -z-10 dot-hexagon-light dark:dot-hexagon-dark"
+      >
+      </div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(255,255,255,0.5)_60%,rgba(255,255,255,0.9)_85%,white_100%)] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(23,23,23,0.5)_60%,rgba(23,23,23,0.9)_85%,rgb(23,23,23)_100%)] -z-10"
+      >
+      </div>
+      <div
+        class="absolute left-0 right-0 top-0 -z-10 m-auto h-[1200px] w-[1200px] rounded-full bg-neutral-400 opacity-10 blur-[100px]"
+      >
+      </div>
+    </div>
+
+    <main class="flex-1 relative z-10">
+      <Navigation />
+
+      <article class="relative z-20 w-[896px] mx-auto mt-24 mb-12 px-7 lg:px-0">
+        <header class="text-center">
+          <h1
+            class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl lg:text-4xl mb-1.5"
+          >
+            {frontmatter.title}
+          </h1>
+          <div
+            class="flex items-center justify-center gap-4 text-sm text-neutral-600 dark:text-neutral-400 mb-1.5"
+          >
+            <time datetime={frontmatter.date || ""}>
+              {
+                frontmatter.date
+                  ? new Date(frontmatter.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  : ""
+              }
+            </time>
+            <span>•</span>
+            <span>{frontmatter.readTime}</span>
+          </div>
+        </header>
+
+        {
+          frontmatter.description && (
+            <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-16 text-center">
+              {frontmatter.description}
+            </p>
+          )
+        }
+
+        <div class="prose prose-neutral dark:prose-invert max-w-none">
+          <Content />
+        </div>
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>

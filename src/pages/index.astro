@@ -1,0 +1,193 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+import { siteConfig, homeContent } from "../config/content.ts";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={siteConfig.title} description={siteConfig.description} />
+    <script is:inline>
+      (function () {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const initialTheme =
+          savedTheme === "system"
+            ? prefersDark
+              ? "dark"
+              : "light"
+            : savedTheme;
+
+        if (initialTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => {
+            if (localStorage.getItem("theme") === "system") {
+              if (e.matches) {
+                document.documentElement.classList.add("dark");
+              } else {
+                document.documentElement.classList.remove("dark");
+              }
+            }
+          });
+      });
+    </script>
+    <style>
+      body {
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      @keyframes float {
+        0% {
+          transform: scale(1.2);
+        }
+        50% {
+          transform: scale(1.3);
+        }
+        100% {
+          transform: scale(1.2);
+        }
+      }
+
+      .dot-hexagon-light {
+        background-image: radial-gradient(
+            circle,
+            #80808045 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #80808045 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+
+      .dot-hexagon-dark {
+        background-image: radial-gradient(
+            circle,
+            #ffffff35 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #ffffff35 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex flex-col bg-white dark:bg-neutral-900 transition-colors duration-300"
+  >
+    <div class="relative flex-grow flex flex-col">
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute inset-0 dot-hexagon-light dark:dot-hexagon-dark">
+        </div>
+        <div
+          class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(255,255,255,0.5)_60%,rgba(255,255,255,0.9)_85%,white_100%)] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(23,23,23,0.5)_60%,rgba(23,23,23,0.9)_85%,rgb(23,23,23)_100%)]"
+        >
+        </div>
+        <div
+          class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[1200px] w-[1200px] rounded-full bg-neutral-400 opacity-10 blur-[100px] dark:bg-neutral-600 dark:opacity-15"
+          style="max-height: 100vh; max-width: 100vw;"
+        >
+        </div>
+      </div>
+
+      <Navigation />
+      <div class="relative flex flex-col flex-1 pt-4 min-h-0">
+        <main class="flex-grow flex flex-col min-h-0">
+          <div class="flex-1 flex items-center justify-center min-h-0">
+            <div
+              class="flex flex-row items-center justify-between w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 gap-12"
+            >
+              <div class="w-[45%] text-left">
+                <h1
+                  class="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-4xl"
+                >
+                  {homeContent.title}
+                </h1>
+                <p
+                  class="mt-3 text-lg leading-7 text-neutral-600 dark:text-neutral-400"
+                >
+                  {homeContent.description}
+                </p>
+                <div class="flex flex-row gap-4 mt-4">
+                  <a
+                    class="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-neutral-900 rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 transition-all duration-300 hover:scale-105 cursor-pointer"
+                    href={homeContent.buttons.about.href}
+                    >{homeContent.buttons.about.text}<svg
+                      class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      ><path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2.5"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg
+                    ></a
+                  >
+                  <a
+                    class="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-900 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:bg-neutral-800 dark:text-neutral-100 dark:border-neutral-600 dark:hover:bg-neutral-700 transition-all duration-300 hover:scale-105 cursor-pointer"
+                    href={homeContent.buttons.posts.href}
+                    >{homeContent.buttons.posts.text}<svg
+                      class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      ><path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2.5"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg
+                    ></a
+                  >
+                </div>
+              </div>
+              <div
+                class="relative w-[45%] flex items-center justify-center bg-transparent overflow-hidden z-20"
+              >
+                <div
+                  class="relative overflow-hidden"
+                  style="width: min(700px, 45vw); height: min(700px, 70vh); max-width: 100%; max-height: 70vh;"
+                >
+                  <img
+                    src={homeContent.images.light}
+                    alt="Tech Background"
+                    class="w-full h-full object-contain animate-[float_15s_ease-in-out_infinite] hover:scale-125 transition-transform duration-300 opacity-90 dark:hidden"
+                    style="max-width: 100%; max-height: 100%;"
+                  />
+
+                  <img
+                    src={homeContent.images.dark}
+                    alt="Tech Background Dark"
+                    class="w-full h-full object-contain animate-[float_15s_ease-in-out_infinite] hover:scale-125 transition-transform duration-300 opacity-90 hidden dark:block"
+                    style="max-width: 100%; max-height: 100%;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    </div>
+  </body>
+</html>

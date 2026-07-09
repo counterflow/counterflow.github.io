@@ -1,0 +1,390 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+import { getAllPosts } from "../utils/getPosts";
+
+const POSTS_PER_PAGE = 5;
+
+const allPosts = getAllPosts();
+
+const postsData = JSON.stringify(allPosts);
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Blog Posts - Counterflow"
+      description="Read my latest blog posts and articles"
+    />
+    <script is:inline>
+      (function () {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const initialTheme =
+          savedTheme === "system"
+            ? prefersDark
+              ? "dark"
+              : "light"
+            : savedTheme;
+
+        if (initialTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => {
+            if (localStorage.getItem("theme") === "system") {
+              if (e.matches) {
+                document.documentElement.classList.add("dark");
+              } else {
+                document.documentElement.classList.remove("dark");
+              }
+            }
+          });
+      });
+    </script>
+    <script define:vars={{ postsData, POSTS_PER_PAGE }}>
+      document.addEventListener("DOMContentLoaded", function () {
+        const allPosts = JSON.parse(postsData);
+        const postsPerPage = POSTS_PER_PAGE;
+        const totalPosts = allPosts.length;
+        const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+        function getCurrentPage() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const page = urlParams.get("page");
+          return page ? parseInt(page, 10) : 1;
+        }
+
+        function getPageUrl(page) {
+          if (page === 1) {
+            return "/posts/";
+          }
+          return `/posts/?page=${page}`;
+        }
+
+        function renderPosts(page) {
+          const currentPage = Math.max(1, Math.min(page, totalPages));
+          const startIndex = (currentPage - 1) * postsPerPage;
+          const endIndex = startIndex + postsPerPage;
+          const postsToShow = allPosts.slice(startIndex, endIndex);
+
+          const postsContainer = document.getElementById("posts-container");
+          if (!postsContainer) return;
+
+          postsContainer.innerHTML = postsToShow
+            .map(
+              (post) => `
+            <a href="${post.href}">
+              <div
+                class="relative border border-transparent border-dashed cursor-pointer p-7 group rounded-2xl"
+              >
+                <div
+                  class="absolute inset-0 z-20 w-full h-full duration-300 ease-out bg-white dark:bg-neutral-950 border border-dashed rounded-2xl border-neutral-300 dark:border-neutral-700 group-hover:-translate-x-1 group-hover:-translate-y-1"
+                >
+                  <div
+                    class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px] dark:bg-[radial-gradient(#404040_1px,transparent_1px)] opacity-50"
+                  >
+                  </div>
+                </div>
+                <div
+                  class="absolute inset-0 z-10 w-full h-full duration-300 ease-out border border-dashed rounded-2xl border-neutral-300 dark:border-neutral-700 group-hover:translate-x-1 group-hover:translate-y-1"
+                >
+                </div>
+                <div
+                  class="relative z-30 duration-300 ease-out group-hover:-translate-x-1 group-hover:-translate-y-1"
+                >
+                  <div class="flex gap-8">
+                    <div class="flex-[2]">
+                      <h2 class="relative mb-4 pr-6">
+                        <span
+                          class="text-lg font-bold leading-tight tracking-tight sm:text-xl lg:text-2xl text-neutral-900 dark:text-neutral-100"
+                        >
+                          ${post.title}
+                        </span>
+                        <svg
+                          class="absolute top-[0.2rem] sm:top-[0.25rem] lg:top-[0.3rem] right-0 group-hover:translate-x-0 flex-shrink-0 -translate-x-1 w-4 h-4 stroke-current transition-all ease-in-out duration-200 transform opacity-0 group-hover:opacity-100 text-neutral-600 dark:text-neutral-400"
+                          viewBox="0 0 13 15"
+                        >
+                          <g
+                            stroke="none"
+                            stroke-width="1"
+                            fill="none"
+                            fill-rule="evenodd"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <g
+                              transform="translate(0.666667, 2.333333)"
+                              stroke="currentColor"
+                              stroke-width="2.4"
+                            >
+                              <g>
+                                <polyline
+                                  class="transition-all duration-200 ease-out opacity-0 delay-0 group-hover:opacity-100"
+                                  points="5.33333333 0 10.8333333 5.5 5.33333333 11"
+                                ></polyline>
+                                <line
+                                  class="transition-all duration-200 ease-out transform -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-hover:ml-0"
+                                  x1="10.8333333"
+                                  y1="5.5"
+                                  x2="0.833333333"
+                                  y2="5.16666667"
+                                ></line>
+                              </g>
+                            </g>
+                          </g>
+                        </svg>
+                      </h2>
+                      <p
+                        class="text-base text-neutral-600 dark:text-neutral-400 mb-3"
+                      >
+                        <span>${post.description}</span>
+                      </p>
+                      <div
+                        class="flex items-center gap-4 text-sm font-medium text-neutral-600 dark:text-neutral-400"
+                      >
+                        <span>Posted on ${post.date}</span>
+                        <span class="flex items-center">
+                          <svg
+                            class="w-4 h-4 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            ></path>
+                          </svg>
+                          ${post.readTime}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      class="relative flex-1 h-48 rounded-xl overflow-hidden flex-shrink-0"
+                    >
+                      <img
+                        src="${post.image}"
+                        alt="${post.title}"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          `
+            )
+            .join("");
+        }
+
+        function renderPagination(page) {
+          const currentPage = Math.max(1, Math.min(page, totalPages));
+          const paginationContainer = document.getElementById(
+            "pagination-container"
+          );
+          if (!paginationContainer) return;
+
+          if (totalPages <= 1) {
+            paginationContainer.innerHTML = "";
+            return;
+          }
+
+          let paginationHTML =
+            '<div class="flex justify-center items-center gap-2 mt-8">';
+
+          if (currentPage > 1) {
+            paginationHTML += `
+              <a
+                href="${getPageUrl(currentPage - 1)}"
+                class="px-3 py-1 text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              >
+                Previous
+              </a>
+            `;
+          } else {
+            paginationHTML += `
+              <span
+                class="px-3 py-1 text-sm font-medium text-neutral-600 dark:text-neutral-400 opacity-50 cursor-not-allowed"
+              >
+                Previous
+              </span>
+            `;
+          }
+
+          for (let i = 1; i <= totalPages; i++) {
+            const isCurrentPage = i === currentPage;
+            paginationHTML += `
+              <a
+                href="${getPageUrl(i)}"
+                aria-current="${isCurrentPage ? "page" : undefined}"
+                class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium transition-colors ${
+                  isCurrentPage
+                    ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                    : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
+                }"
+              >
+                ${i}
+              </a>
+            `;
+          }
+
+          if (currentPage < totalPages) {
+            paginationHTML += `
+              <a
+                href="${getPageUrl(currentPage + 1)}"
+                class="px-3 py-1 text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              >
+                Next
+              </a>
+            `;
+          } else {
+            paginationHTML += `
+              <span
+                class="px-3 py-1 text-sm font-medium text-neutral-600 dark:text-neutral-400 opacity-50 cursor-not-allowed"
+              >
+                Next
+              </span>
+            `;
+          }
+
+          paginationHTML += "</div>";
+          paginationContainer.innerHTML = paginationHTML;
+        }
+
+        function handlePaginationClick(e) {
+          const target = e.target.closest("a");
+          if (!target || !target.href) return;
+
+          const href = target.getAttribute("href");
+          if (href && href.startsWith("/posts") && href.includes("?page=")) {
+            e.preventDefault();
+            const url = new URL(href, window.location.origin);
+            const page = url.searchParams.get("page") || "1";
+            window.history.pushState({ page }, "", href);
+            const currentPage = parseInt(page, 10);
+            renderPosts(currentPage);
+            renderPagination(currentPage);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        }
+
+        const currentPage = getCurrentPage();
+        renderPosts(currentPage);
+        renderPagination(currentPage);
+
+        const paginationContainer = document.getElementById(
+          "pagination-container"
+        );
+        if (paginationContainer) {
+          paginationContainer.addEventListener("click", handlePaginationClick);
+        }
+
+        window.addEventListener("popstate", function () {
+          const page = getCurrentPage();
+          renderPosts(page);
+          renderPagination(page);
+        });
+      });
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-x: hidden;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      main {
+        flex: 1;
+      }
+      section[class*="text-gray-700"] {
+        margin: 0;
+        padding: 0;
+        flex-shrink: 0;
+      }
+
+      .dot-hexagon-light {
+        background-image: radial-gradient(
+            circle,
+            #80808045 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #80808045 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+
+      .dot-hexagon-dark {
+        background-image: radial-gradient(
+            circle,
+            #ffffff35 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #ffffff35 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+    </style>
+  </head>
+  <body class="bg-white dark:bg-neutral-900 transition-colors duration-300">
+    <div class="fixed inset-0 z-0 pointer-events-none">
+      <div
+        class="absolute inset-0 -z-10 dot-hexagon-light dark:dot-hexagon-dark"
+      >
+      </div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(255,255,255,0.5)_60%,rgba(255,255,255,0.9)_85%,white_100%)] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(23,23,23,0.5)_60%,rgba(23,23,23,0.9)_85%,rgb(23,23,23)_100%)] -z-10"
+      >
+      </div>
+      <div
+        class="absolute left-0 right-0 top-0 -z-10 m-auto h-[1200px] w-[1200px] rounded-full bg-neutral-400 opacity-10 blur-[100px]"
+      >
+      </div>
+    </div>
+
+    <main class="flex-1 relative z-10">
+      <Navigation />
+      <section class="relative z-20 w-[896px] mx-auto mt-24">
+        <div class="flex justify-between items-center mb-12">
+          <h2
+            class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl lg:text-4xl"
+          >
+            Blog Posts
+          </h2>
+        </div>
+
+        <div
+          id="posts-container"
+          class="flex flex-col items-stretch w-full gap-8"
+        >
+        </div>
+
+        <div id="pagination-container"></div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>

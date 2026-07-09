@@ -1,0 +1,203 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+import { aboutContent } from "../config/content.ts";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title={aboutContent.meta.title}
+      description={aboutContent.meta.description}
+      image={aboutContent.image.src}
+    />
+    <script is:inline>
+      (function () {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const initialTheme =
+          savedTheme === "system"
+            ? prefersDark
+              ? "dark"
+              : "light"
+            : savedTheme;
+
+        if (initialTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => {
+            if (localStorage.getItem("theme") === "system") {
+              if (e.matches) {
+                document.documentElement.classList.add("dark");
+              } else {
+                document.documentElement.classList.remove("dark");
+              }
+            }
+          });
+      });
+    </script>
+    <style>
+      .dot-hexagon-light {
+        background-image: radial-gradient(
+            circle,
+            #80808045 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #80808045 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+
+      .dot-hexagon-dark {
+        background-image: radial-gradient(
+            circle,
+            #ffffff35 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #ffffff35 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex flex-col bg-white dark:bg-neutral-900 transition-colors duration-300"
+  >
+    <div class="relative flex-grow flex flex-col">
+      <div class="absolute inset-0 z-0">
+        <div
+          class="absolute inset-0 -z-10 dot-hexagon-light dark:dot-hexagon-dark"
+        >
+        </div>
+        <div
+          class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(255,255,255,0.5)_60%,rgba(255,255,255,0.9)_85%,white_100%)] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(23,23,23,0.5)_60%,rgba(23,23,23,0.9)_85%,rgb(23,23,23)_100%)] -z-10"
+        >
+        </div>
+        <div
+          class="absolute left-0 right-0 top-0 -z-10 m-auto h-[1200px] w-[1200px] rounded-full bg-neutral-400 opacity-10 blur-[100px]"
+        >
+        </div>
+      </div>
+
+      <Navigation />
+      <section class="relative z-20 w-[896px] mx-auto mt-24 mb-12">
+        <div class="relative z-20 w-full mx-auto lg:mx-0">
+          <h2
+            class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl lg:text-4xl"
+          >
+            {aboutContent.title}
+          </h2>
+          <div class="flex flex-col md:flex-row gap-8 mt-3 sm:mt-4 lg:mt-6">
+            <div class="w-full md:w-1/2 flex flex-col">
+              <p
+                class="text-sm leading-6 text-gray-600 dark:text-neutral-400 sm:leading-7 lg:leading-8 sm:text-base lg:text-lg"
+              >
+                {aboutContent.description}
+              </p>
+              <div class="mt-auto pt-4 flex flex-wrap gap-2">
+                {
+                  aboutContent.skills.map((skill) => (
+                    <span class="px-3 py-1 text-sm bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-full">
+                      {skill}
+                    </span>
+                  ))
+                }
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 flex justify-end">
+              <div class="relative w-[360px] h-[360px]">
+                <img
+                  src={aboutContent.image.src}
+                  alt={aboutContent.image.alt}
+                  class="object-cover rounded-xl w-full h-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row mt-20">
+          <div class="flex-1">
+            <h2 class="mb-2 text-2xl font-bold dark:text-neutral-200">
+              {aboutContent.experience.title}
+            </h2>
+            <div class="py-10">
+              {
+                aboutContent.experience.items.map((item) => (
+                  <div class="pb-10 border-l border-gray-200 last:border-l-0 dark:border-neutral-700">
+                    <div class="relative flex flex-col justify-start pl-12">
+                      <div class="absolute top-0 left-0 z-40 flex items-center justify-center -translate-x-1/2 bg-white border rounded-full dark:bg-neutral-950 w-14 h-14 border-neutral-300 dark:border-neutral-700">
+                        <svg
+                          class="w-8 h-8 text-neutral-700 dark:text-neutral-300"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                          />
+                        </svg>
+                      </div>
+                      <p class="text-xs uppercase text-neutral-400 dark:text-neutral-500 tracking-widest">
+                        {item.period}
+                      </p>
+                      <h3 class="my-1 text-lg font-bold dark:text-neutral-100">
+                        {item.position}
+                      </h3>
+                      <p class="mb-1 text-sm font-medium dark:text-neutral-300">
+                        {item.company}
+                      </p>
+                      <p class="text-sm font-light text-neutral-600 dark:text-neutral-400">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="w-[360px] ml-8">
+            <h2 class="mb-2 text-2xl font-bold dark:text-neutral-200">
+              {aboutContent.connect.title}
+            </h2>
+            <div class="py-[30px]">
+              <p
+                class="text-sm leading-6 text-gray-600 dark:text-neutral-400 sm:leading-7 lg:leading-8 sm:text-base lg:text-lg"
+              >
+                {aboutContent.connect.description}
+                <a
+                  href={aboutContent.connect.email.href}
+                  class="text-indigo-600 underline"
+                >
+                  {aboutContent.connect.email.text}
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <Footer />
+  </body>
+</html>

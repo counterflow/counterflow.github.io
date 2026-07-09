@@ -1,0 +1,54 @@
+---
+// Shared <head> SEO tags: primary meta, canonical, Open Graph, Twitter cards.
+// Drop <BaseHead ... /> in as the first child of each page's <head>.
+import { siteConfig } from "../config/content.ts";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+}
+
+const {
+  title,
+  description = siteConfig.description,
+  image = "/assets/images/about/coder.jpg",
+  type = "website",
+  publishedTime,
+} = Astro.props;
+
+// Resolve canonical + social image to absolute URLs from `site` in astro.config.
+// Falls back gracefully if `site` is ever unset. Uses the real request path so
+// it automatically follows a future custom domain — nothing hardcoded.
+const canonicalURL = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : Astro.url.href;
+const socialImage = Astro.site ? new URL(image, Astro.site).href : image;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Primary meta -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={socialImage} />
+<meta property="og:site_name" content={siteConfig.name} />
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImage} />

@@ -1,0 +1,201 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+import { projectsContent } from "../config/content.ts";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title={projectsContent.meta.title}
+      description={projectsContent.meta.description}
+    />
+    <script is:inline>
+      (function () {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const initialTheme =
+          savedTheme === "system"
+            ? prefersDark
+              ? "dark"
+              : "light"
+            : savedTheme;
+
+        if (initialTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => {
+            if (localStorage.getItem("theme") === "system") {
+              if (e.matches) {
+                document.documentElement.classList.add("dark");
+              } else {
+                document.documentElement.classList.remove("dark");
+              }
+            }
+          });
+      });
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-x: hidden;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      main {
+        flex: 1;
+      }
+      section[class*="text-gray-700"] {
+        margin: 0;
+        padding: 0;
+        flex-shrink: 0;
+      }
+
+      .dot-hexagon-light {
+        background-image: radial-gradient(
+            circle,
+            #80808045 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #80808045 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+
+      .dot-hexagon-dark {
+        background-image: radial-gradient(
+            circle,
+            #ffffff35 1px,
+            transparent 1px
+          ),
+          radial-gradient(circle, #ffffff35 1px, transparent 1px);
+        background-size: 24px 41.57px;
+        background-position:
+          0 0,
+          12px 20.78px;
+      }
+    </style>
+  </head>
+  <body class="bg-white dark:bg-neutral-900 transition-colors duration-300">
+    <div class="fixed inset-0 z-0 pointer-events-none">
+      <div
+        class="absolute inset-0 -z-10 dot-hexagon-light dark:dot-hexagon-dark"
+      >
+      </div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(255,255,255,0.5)_60%,rgba(255,255,255,0.9)_85%,white_100%)] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_0%,rgba(23,23,23,0.5)_60%,rgba(23,23,23,0.9)_85%,rgb(23,23,23)_100%)] -z-10"
+      >
+      </div>
+      <div
+        class="absolute left-0 right-0 top-0 -z-10 m-auto h-[1200px] w-[1200px] rounded-full bg-neutral-400 opacity-10 blur-[100px]"
+      >
+      </div>
+    </div>
+
+    <main class="flex-1 relative z-10">
+      <Navigation />
+      <section class="relative z-20 max-w-4xl mx-auto mt-32 mb-12 px-7 lg:px-0">
+        <div class="relative z-20 w-full mx-auto lg:mx-0">
+          <h2
+            class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl lg:text-4xl"
+          >
+            {projectsContent.title}
+          </h2>
+          <p
+            class="mt-3 text-sm leading-6 text-neutral-600 dark:text-neutral-400 sm:leading-7 lg:leading-8 sm:text-base lg:text-lg"
+          >
+            {projectsContent.description}
+          </p>
+
+          <div
+            class="z-50 grid items-stretch w-full grid-cols-1 my-8 gap-7 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {
+              projectsContent.projects.map((project) => (
+                <a
+                  href={project.href}
+                  target="_blank"
+                  class="relative flex flex-col items-stretch duration-300 ease-out p-7 sm:p-3 group rounded-2xl"
+                >
+                  <span class="absolute inset-0 z-20 block w-full h-full duration-300 ease-out bg-transparent border border-transparent border-dashed group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:border group-hover:border-neutral-300 dark:group-hover:border-neutral-600 group-hover:border-dashed rounded-2xl group-hover:bg-white dark:group-hover:bg-neutral-950" />
+                  <span class="absolute inset-0 z-10 block w-full h-full duration-300 ease-out border border-dashed rounded-2xl border-neutral-300 dark:border-neutral-600 group-hover:translate-x-1 group-hover:translate-y-1" />
+                  <span class="relative z-30 block duration-300 ease-out group-hover:-translate-x-1 group-hover:-translate-y-1">
+                    <span class="block w-full">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        class="w-full h-auto rounded-lg aspect-[16/9] object-cover"
+                      />
+                    </span>
+                    <span class="block w-full px-1 mt-5 mb-1 sm:mt-3">
+                      <span class="flex items-center mb-0 text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+                        <span>{project.title}</span>
+                        <svg
+                          class="group-hover:translate-x-0 group-hover:translate-y-0 -rotate-45 translate-y-1 -translate-x-1 w-2.5 h-2.5 stroke-current ml-1 transition-all ease-in-out duration-200 transform"
+                          viewBox="0 0 13 15"
+                        >
+                          <g
+                            stroke="none"
+                            stroke-width="1"
+                            fill="none"
+                            fill-rule="evenodd"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <g
+                              transform="translate(0.666667, 2.333333)"
+                              stroke="currentColor"
+                              stroke-width="2.4"
+                            >
+                              <g>
+                                <polyline
+                                  class="transition-all duration-200 ease-out opacity-0 delay-0 group-hover:opacity-100"
+                                  points="5.33333333 0 10.8333333 5.5 5.33333333 11"
+                                />
+                                <line
+                                  class="transition-all duration-200 ease-out transform -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-hover:ml-0"
+                                  x1="10.8333333"
+                                  y1="5.5"
+                                  x2="0.833333333"
+                                  y2="5.16666667"
+                                />
+                              </g>
+                            </g>
+                          </g>
+                        </svg>
+                      </span>
+                      <span class="text-sm text-neutral-600 dark:text-neutral-400 block truncate">
+                        {project.description}
+                      </span>
+                    </span>
+                  </span>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
