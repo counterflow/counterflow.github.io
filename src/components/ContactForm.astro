@@ -1,0 +1,124 @@
+---
+// Contact form powered by Web3Forms — https://web3forms.com
+//
+// SETUP: put your Web3Forms access key in a `.env` file at the project root:
+//   WEB3FORMS_ACCESS_KEY=your-key-here
+// `.env` is gitignored. For deployed builds, add the same value as a GitHub
+// Actions secret named WEB3FORMS_ACCESS_KEY (wired in deploy.yml).
+//
+// Read here in the frontmatter (build-time), so the variable name never lands
+// in the client bundle. NOTE: the key's *value* is still baked into the built
+// HTML — that's inherent to any client-side form, and safe: it's a submit-only
+// public token whose only power is "send a message to this form".
+const WEB3FORMS_ACCESS_KEY = import.meta.env.WEB3FORMS_ACCESS_KEY ?? "";
+
+interface Props {
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+
+const fieldClass =
+  "w-full rounded-lg border border-neutral-300 bg-white/70 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 transition-colors focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-700 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder-neutral-500";
+---
+
+<form id="contact-form" class={className}>
+  <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+  <input type="hidden" name="subject" value="New message via Counterflow" />
+  <input type="hidden" name="from_name" value="Counterflow" />
+  {/* Honeypot — hidden from humans, bots fill it and get rejected */}
+  <input
+    type="checkbox"
+    name="botcheck"
+    class="hidden"
+    style="display:none"
+    tabindex="-1"
+    autocomplete="off"
+  />
+
+  <div class="flex flex-col gap-3">
+    <div>
+      <label for="cf-name" class="sr-only">Name</label>
+      <input
+        id="cf-name"
+        name="name"
+        type="text"
+        required
+        placeholder="Your name"
+        class={fieldClass}
+      />
+    </div>
+    <div>
+      <label for="cf-email" class="sr-only">Email</label>
+      <input
+        id="cf-email"
+        name="email"
+        type="email"
+        required
+        placeholder="you@example.com"
+        class={fieldClass}
+      />
+    </div>
+    <div>
+      <label for="cf-message" class="sr-only">Message</label>
+      <textarea
+        id="cf-message"
+        name="message"
+        required
+        rows="4"
+        placeholder="What's on your mind?"
+        class={fieldClass}></textarea>
+    </div>
+    <button
+      type="submit"
+      class="inline-flex items-center justify-center rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
+    >
+      Send message
+    </button>
+    <p id="cf-result" class="text-sm" role="status" aria-live="polite"></p>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  if (form) {
+    const result = document.getElementById("cf-result");
+    const button = form.querySelector(
+      'button[type="submit"]'
+    ) as HTMLButtonElement | null;
+
+    const setResult = (text: string, tone: "muted" | "ok" | "error") => {
+      if (!result) return;
+      const tones = {
+        muted: "text-sm text-neutral-500 dark:text-neutral-400",
+        ok: "text-sm text-green-600 dark:text-green-400",
+        error: "text-sm text-red-600 dark:text-red-400",
+      };
+      result.textContent = text;
+      result.className = tones[tone];
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setResult("Sending…", "muted");
+      if (button) button.disabled = true;
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(form),
+        });
+        const json = await res.json();
+        if (res.ok && json.success) {
+          form.reset();
+          setResult("Thanks — your message is on its way.", "ok");
+        } else {
+          setResult(json.message || "Something went wrong. Please try again.", "error");
+        }
+      } catch {
+        setResult("Network error. Please try again.", "error");
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  }
+</script>

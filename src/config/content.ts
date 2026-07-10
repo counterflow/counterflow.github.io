@@ -89,11 +89,7 @@ export const aboutContent = {
   connect: {
     title: "Let's Work Together",
     description:
-      "Have a project in mind or need an extra pair of expert hands? I'm open to consulting and freelance work. Find me on GitHub or drop me an",
-    email: {
-      text: "email",
-      href: "mailto:ian@codewolf.co.nz",
-    },
+      "Have a project in mind or need an extra pair of expert hands? I'm open to consulting and freelance work — send me a message and I'll get back to you.",
   },
 };
 

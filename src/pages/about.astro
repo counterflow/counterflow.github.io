@@ -2,6 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
+import ContactForm from "../components/ContactForm.astro";
 import { aboutContent } from "../config/content.ts";
 ---
 
@@ -184,14 +185,8 @@ import { aboutContent } from "../config/content.ts";
                 class="text-sm leading-6 text-gray-600 dark:text-neutral-400 sm:leading-7 lg:leading-8 sm:text-base lg:text-lg"
               >
                 {aboutContent.connect.description}
-                <a
-                  href={aboutContent.connect.email.href}
-                  class="text-indigo-600 underline"
-                >
-                  {aboutContent.connect.email.text}
-                </a>
-                .
               </p>
+              <ContactForm class="mt-6" />
             </div>
           </div>
         </div>
