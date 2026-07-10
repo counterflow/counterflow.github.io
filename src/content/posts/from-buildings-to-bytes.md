@@ -5,7 +5,7 @@ date: "2026-07-08"
 readTime: "6 min read"
 image: "/assets/images/posts/post2.jpg"
 slug: "from-buildings-to-bytes"
-draft: true
+draft: false
 ---
 
 # From Buildings to Bytes: A Structural Engineer's Route to AI-Native Tech Lead
