@@ -49,6 +49,10 @@ import { aboutContent } from "../config/content.ts";
       });
     </script>
     <style>
+      html,
+      body {
+        overflow-x: hidden;
+      }
       .dot-hexagon-light {
         background-image: radial-gradient(
             circle,
@@ -96,7 +100,7 @@ import { aboutContent } from "../config/content.ts";
       </div>
 
       <Navigation />
-      <section class="relative z-20 w-[896px] mx-auto mt-24 mb-12">
+      <section class="relative z-20 w-full max-w-[896px] mx-auto px-4 sm:px-6 lg:px-8 mt-24 mb-12">
         <div class="relative z-20 w-full mx-auto lg:mx-0">
           <h2
             class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl lg:text-4xl"
@@ -120,8 +124,8 @@ import { aboutContent } from "../config/content.ts";
                 }
               </div>
             </div>
-            <div class="w-full md:w-1/2 flex justify-end">
-              <div class="relative w-[360px] h-[360px]">
+            <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+              <div class="relative w-full max-w-[360px] aspect-square">
                 <img
                   src={aboutContent.image.src}
                   alt={aboutContent.image.alt}
@@ -132,8 +136,8 @@ import { aboutContent } from "../config/content.ts";
           </div>
         </div>
 
-        <div class="flex flex-col md:flex-row mt-20">
-          <div class="flex-1">
+        <div class="flex flex-col md:flex-row mt-16 md:mt-20">
+          <div class="flex-1 pl-4 md:pl-0">
             <h2 class="mb-2 text-2xl font-bold dark:text-neutral-200">
               {aboutContent.experience.title}
             </h2>
@@ -176,7 +180,7 @@ import { aboutContent } from "../config/content.ts";
             </div>
           </div>
 
-          <div class="w-[360px] ml-8">
+          <div class="w-full md:w-[360px] md:ml-8 mt-10 md:mt-0">
             <h2 class="mb-2 text-2xl font-bold dark:text-neutral-200">
               {aboutContent.connect.title}
             </h2>

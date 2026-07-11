@@ -114,9 +114,9 @@ import { siteConfig, homeContent } from "../config/content.ts";
         <main class="flex-grow flex flex-col min-h-0">
           <div class="flex-1 flex items-center justify-center min-h-0">
             <div
-              class="flex flex-row items-center justify-between w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 gap-12"
+              class="flex flex-col md:flex-row items-center justify-between w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 gap-8 md:gap-12"
             >
-              <div class="w-[45%] text-left">
+              <div class="w-full md:w-[45%] text-center md:text-left">
                 <h1
                   class="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-4xl"
                 >
@@ -127,7 +127,7 @@ import { siteConfig, homeContent } from "../config/content.ts";
                 >
                   {homeContent.description}
                 </p>
-                <div class="flex flex-row gap-4 mt-4">
+                <div class="flex flex-row flex-wrap justify-center md:justify-start gap-4 mt-4">
                   <a
                     class="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-neutral-900 rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 transition-all duration-300 hover:scale-105 cursor-pointer"
                     href={homeContent.buttons.about.href}
@@ -161,11 +161,10 @@ import { siteConfig, homeContent } from "../config/content.ts";
                 </div>
               </div>
               <div
-                class="relative w-[45%] flex items-center justify-center bg-transparent overflow-hidden z-20"
+                class="relative w-full md:w-[45%] flex items-center justify-center bg-transparent overflow-hidden z-20"
               >
                 <div
-                  class="relative overflow-hidden"
-                  style="width: min(700px, 45vw); height: min(700px, 70vh); max-width: 100%; max-height: 70vh;"
+                  class="relative overflow-hidden w-[min(320px,75vw)] h-[min(320px,45vh)] max-w-full max-h-[70vh] md:w-[min(700px,45vw)] md:h-[min(700px,70vh)]"
                 >
                   <img
                     src={homeContent.images.light}
