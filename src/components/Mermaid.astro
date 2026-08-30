@@ -1,0 +1,116 @@
+---
+/**
+ * Renders ```mermaid fences in markdown prose as diagrams.
+ *
+ * Mermaid is loaded lazily and only when a page actually contains a diagram,
+ * so posts without one pay nothing. It's bundled from the local npm package
+ * rather than a CDN, and re-renders when the theme toggle flips so diagrams
+ * stay legible on both backgrounds.
+ */
+---
+
+<script>
+  document.addEventListener("DOMContentLoaded", async function () {
+    // Astro highlights fenced blocks with Shiki, which tokenises the source
+    // into per-line <span class="line"> elements on a <pre data-language="...">.
+    // So the diagram definition has to be reassembled line by line rather than
+    // read straight off textContent, which would lose the newlines mermaid
+    // needs. The second selector covers the case where highlighting is off.
+    const blocks = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        'pre[data-language="mermaid"], pre > code.language-mermaid'
+      )
+    );
+
+    if (blocks.length === 0) return;
+
+    function readSource(block: HTMLElement): string {
+      const lines = block.querySelectorAll<HTMLElement>(".line");
+      if (lines.length > 0) {
+        return Array.from(lines)
+          .map((line) => line.textContent ?? "")
+          .join("\n")
+          .trim();
+      }
+      return (block.textContent || "").trim();
+    }
+
+    // Replace each block with a container that keeps the source, so a theme
+    // change can re-render from the original definition.
+    const containers: HTMLElement[] = [];
+
+    for (const block of blocks) {
+      const source = readSource(block);
+      if (!source) continue;
+
+      const host = document.createElement("div");
+      host.className = "mermaid-diagram my-8 flex justify-center overflow-x-auto";
+      host.dataset.source = source;
+
+      const target = block.tagName === "CODE" ? block.parentElement : block;
+      (target ?? block).replaceWith(host);
+      containers.push(host);
+    }
+
+    if (containers.length === 0) return;
+
+    const { default: mermaid } = await import("mermaid");
+
+    let renderCount = 0;
+
+    async function renderAll() {
+      const isDark = document.documentElement.classList.contains("dark");
+
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "strict",
+        theme: isDark ? "dark" : "default",
+        fontFamily: "inherit",
+      });
+
+      for (const host of containers) {
+        const source = host.dataset.source;
+        if (!source) continue;
+
+        try {
+          const { svg } = await mermaid.render(
+            `mermaid-svg-${renderCount++}`,
+            source
+          );
+          host.innerHTML = svg;
+        } catch (error) {
+          console.error("[mermaid] failed to render diagram", error);
+          host.innerHTML = `<pre class="text-sm text-red-600 dark:text-red-400">${source.replace(
+            /[<>&]/g,
+            (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c] ?? c
+          )}</pre>`;
+        }
+      }
+    }
+
+    await renderAll();
+
+    // Re-render on theme change so the diagram never ends up dark-on-dark.
+    let pending: number | undefined;
+    const observer = new MutationObserver(function (mutations) {
+      const themeChanged = mutations.some(
+        (m) => m.attributeName === "class"
+      );
+      if (!themeChanged) return;
+      window.clearTimeout(pending);
+      pending = window.setTimeout(renderAll, 50);
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  });
+</script>
+
+<style is:global>
+  .mermaid-diagram svg {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

@@ -2,7 +2,12 @@
 import BaseHead from "../../components/BaseHead.astro";
 import Navigation from "../../components/Navigation.astro";
 import Footer from "../../components/Footer.astro";
-import { getPostBySlug, getAllPostSlugs } from "../../utils/getPosts";
+import Mermaid from "../../components/Mermaid.astro";
+import {
+  getPostBySlug,
+  getAllPostSlugs,
+  getSeriesNav,
+} from "../../utils/getPosts";
 
 export async function getStaticPaths() {
   const slugs = getAllPostSlugs();
@@ -29,6 +34,10 @@ if (!Content) {
   console.error(`Content component not found for slug: ${slug}`);
   return Astro.redirect("/posts/");
 }
+
+const seriesNav = getSeriesNav({ slug, series: frontmatter.series || null });
+const partNumber = frontmatter.part ?? (seriesNav ? seriesNav.index + 1 : null);
+const partsTotal = seriesNav?.series.partsTotal ?? frontmatter.partsTotal ?? null;
 
 const pageTitle = `${frontmatter.title} - Counterflow`;
 const ogImage = frontmatter.image || "/assets/images/posts/post1.jpg";
@@ -178,6 +187,20 @@ const jsonLd = {
         class="relative z-20 mx-auto mt-24 mb-12 w-[calc(100%-2rem)] max-w-[896px] rounded-2xl border border-neutral-200/70 bg-neutral-100/85 px-6 py-10 shadow-xl shadow-neutral-900/5 backdrop-blur-sm sm:px-10 sm:py-12 lg:px-14 dark:border-neutral-700/60 dark:bg-neutral-800/75 dark:shadow-black/30"
       >
         <header class="text-center">
+          {
+            seriesNav && (
+              <a
+                href={seriesNav.series.href}
+                class="mb-4 inline-flex items-center gap-2 rounded-full border border-dashed border-neutral-300 px-3 py-1 text-xs font-medium text-neutral-600 transition-colors hover:border-neutral-400 hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-400 dark:hover:border-neutral-500 dark:hover:text-neutral-100"
+              >
+                <span>
+                  Part {partNumber} of {partsTotal}
+                </span>
+                <span aria-hidden="true">·</span>
+                <span>{seriesNav.series.title}</span>
+              </a>
+            )
+          }
           <h1
             class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl lg:text-4xl mb-1.5"
           >
@@ -213,9 +236,63 @@ const jsonLd = {
         <div class="prose prose-neutral dark:prose-invert max-w-none">
           <Content />
         </div>
+
+        {
+          seriesNav && (
+            <nav
+              class="mt-14 border-t border-neutral-200/80 pt-8 dark:border-neutral-700/60"
+              aria-label="Series navigation"
+            >
+              <p class="mb-4 text-center text-sm text-neutral-600 dark:text-neutral-400">
+                From the series{" "}
+                <a
+                  href={seriesNav.series.href}
+                  class="font-medium text-neutral-900 underline underline-offset-4 dark:text-neutral-100"
+                >
+                  {seriesNav.series.title}
+                </a>
+              </p>
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-stretch sm:justify-between">
+                {seriesNav.prev ? (
+                  <a
+                    href={seriesNav.prev.href}
+                    rel="prev"
+                    class="group flex flex-1 flex-col rounded-xl border border-dashed border-neutral-300 px-4 py-3 transition-colors hover:border-neutral-400 hover:bg-white/60 dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:bg-neutral-900/40"
+                  >
+                    <span class="text-xs text-neutral-500 dark:text-neutral-400">
+                      ← Previous · Part {seriesNav.prev.part ?? seriesNav.index}
+                    </span>
+                    <span class="mt-1 text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                      {seriesNav.prev.title}
+                    </span>
+                  </a>
+                ) : (
+                  <span class="hidden flex-1 sm:block" />
+                )}
+                {seriesNav.next ? (
+                  <a
+                    href={seriesNav.next.href}
+                    rel="next"
+                    class="group flex flex-1 flex-col rounded-xl border border-dashed border-neutral-300 px-4 py-3 text-right transition-colors hover:border-neutral-400 hover:bg-white/60 dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:bg-neutral-900/40"
+                  >
+                    <span class="text-xs text-neutral-500 dark:text-neutral-400">
+                      Next · Part {seriesNav.next.part ?? seriesNav.index + 2} →
+                    </span>
+                    <span class="mt-1 text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                      {seriesNav.next.title}
+                    </span>
+                  </a>
+                ) : (
+                  <span class="hidden flex-1 sm:block" />
+                )}
+              </div>
+            </nav>
+          )
+        }
       </article>
     </main>
 
     <Footer />
+    <Mermaid />
   </body>
 </html>

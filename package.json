@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "validate": "node scripts/validate-content.mjs",
+    "prebuild": "node scripts/validate-content.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -13,7 +15,8 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^5.16.3",
-    "marked": "^17.0.1"
+    "marked": "^17.0.1",
+    "mermaid": "^11.16.0"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^6.0.2",

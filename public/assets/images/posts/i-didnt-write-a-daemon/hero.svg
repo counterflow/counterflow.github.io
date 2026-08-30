@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="A sealed box showing only a status light, beside a larger open frame revealing the work happening inside it">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#1a2029" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="vignette" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1318"/>
+      <stop offset="1" stop-color="#0a0d11"/>
+    </linearGradient>
+    <linearGradient id="boxface" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c222a"/>
+      <stop offset="1" stop-color="#141920"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="16" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="dot" x="-300%" y="-300%" width="700%" height="700%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#vignette)"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity="0.55"/>
+
+  <!-- left: the sealed box. gives nothing away. -->
+  <g>
+    <rect x="238" y="352" width="304" height="266" rx="10" fill="url(#boxface)" stroke="#2c3743" stroke-width="2"/>
+    <line x1="238" y1="412" x2="542" y2="412" stroke="#242e39" stroke-width="1.5"/>
+    <circle cx="390" cy="520" r="7" fill="#e8a33d" filter="url(#dot)"/>
+  </g>
+  <g fill="none" stroke="#2c3743" stroke-width="1.2" opacity="0.6">
+    <path d="M390 618 L390 664"/>
+    <path d="M330 664 L450 664"/>
+  </g>
+
+  <!-- right: the open frame, larger and full of visible work -->
+  <g filter="url(#glow)">
+    <rect x="812" y="252" width="556" height="440" rx="9" fill="#151b23" stroke="#e8a33d" stroke-width="2.4"/>
+  </g>
+
+  <!-- layered translucent planes of activity -->
+  <g opacity="0.5">
+    <rect x="856" y="300" width="468" height="120" rx="6" fill="#e8a33d" opacity="0.07"/>
+    <rect x="878" y="330" width="424" height="120" rx="6" fill="#5fb7c4" opacity="0.07"/>
+    <rect x="900" y="360" width="380" height="120" rx="6" fill="#e8a33d" opacity="0.06"/>
+  </g>
+
+  <g fill="#e8a33d">
+    <rect x="856" y="316" width="240" height="8" rx="4" opacity="0.85"/>
+    <rect x="856" y="346" width="168" height="8" rx="4" opacity="0.62"/>
+    <rect x="856" y="376" width="322" height="8" rx="4" opacity="0.74"/>
+    <rect x="856" y="406" width="206" height="8" rx="4" opacity="0.55"/>
+    <rect x="856" y="436" width="286" height="8" rx="4" opacity="0.66"/>
+    <rect x="856" y="466" width="148" height="8" rx="4" opacity="0.44"/>
+    <rect x="856" y="496" width="252" height="8" rx="4" opacity="0.56"/>
+    <rect x="856" y="526" width="190" height="8" rx="4" opacity="0.4"/>
+    <rect x="856" y="556" width="308" height="8" rx="4" opacity="0.5"/>
+    <rect x="856" y="586" width="164" height="8" rx="4" opacity="0.34"/>
+    <rect x="856" y="616" width="230" height="8" rx="4" opacity="0.42"/>
+  </g>
+  <rect x="856" y="644" width="20" height="14" rx="2" fill="#e8a33d" filter="url(#dot)"/>
+
+  <!-- the asymmetry, stated: one thin reading, one wide one -->
+  <g stroke="#3b4756" stroke-width="1.4" fill="none" opacity="0.75">
+    <path d="M238 726 L542 726"/>
+    <path d="M238 716 L238 736"/>
+    <path d="M542 716 L542 736"/>
+  </g>
+  <g stroke="#e8a33d" stroke-width="1.6" fill="none" opacity="0.8">
+    <path d="M812 726 L1368 726"/>
+    <path d="M812 716 L812 736"/>
+    <path d="M1368 716 L1368 736"/>
+  </g>
+</svg>

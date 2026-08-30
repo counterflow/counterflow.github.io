@@ -1,3 +1,9 @@
+# Claude Code local overrides (skills, agents and settings.json are committed)
+.claude/settings.local.json
+
+# Playwright MCP scratch output
+.playwright-mcp/
+
 # Logs
 logs
 *.log

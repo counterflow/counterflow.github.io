@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="A structural load path traced down through a frame, continuing as a data flow through connected nodes">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#1a2029" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="vignette" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1318"/>
+      <stop offset="1" stop-color="#0a0d11"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="14" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="node" x="-300%" y="-300%" width="700%" height="700%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#vignette)"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity="0.55"/>
+
+  <!-- left: a portal frame, load coming down -->
+  <g stroke="#4a5a68" stroke-width="3" fill="none">
+    <path d="M180 700 L180 300 L560 300 L560 700"/>
+    <path d="M140 700 L600 700"/>
+  </g>
+  <g stroke="#33404f" stroke-width="1.6" fill="none" opacity="0.9">
+    <path d="M180 300 L560 700"/>
+    <path d="M560 300 L180 700"/>
+    <path d="M180 420 L560 420"/>
+    <path d="M180 540 L560 540"/>
+  </g>
+
+  <!-- applied load -->
+  <g stroke="#e8a33d" stroke-width="2.4" fill="none" opacity="0.9">
+    <path d="M250 180 L250 282"/><path d="M240 268 L250 284 L260 268"/>
+    <path d="M370 180 L370 282"/><path d="M360 268 L370 284 L380 268"/>
+    <path d="M490 180 L490 282"/><path d="M480 268 L490 284 L500 268"/>
+  </g>
+
+  <!-- the load path, traced through and out -->
+  <path d="M370 300 L370 700" stroke="#e8a33d" stroke-width="4" fill="none" filter="url(#glow)" opacity="0.95"/>
+  <path d="M370 700 C 560 700, 620 560, 760 560" stroke="#e8a33d" stroke-width="3" fill="none" opacity="0.85"/>
+
+  <!-- right: the same path, now a data flow -->
+  <g fill="none" stroke="#e8a33d" stroke-width="2.6" opacity="0.85">
+    <path d="M820 560 L980 560"/>
+    <path d="M1040 560 C 1100 560, 1100 430, 1160 430"/>
+    <path d="M1040 560 C 1100 560, 1100 690, 1160 690"/>
+    <path d="M1220 430 L1360 430"/>
+    <path d="M1220 690 L1360 690"/>
+  </g>
+
+  <g>
+    <circle cx="790" cy="560" r="18" fill="#151b23" stroke="#e8a33d" stroke-width="2.6" filter="url(#node)"/>
+    <circle cx="1010" cy="560" r="18" fill="#151b23" stroke="#e8a33d" stroke-width="2.6" filter="url(#node)"/>
+    <rect x="1160" y="404" width="52" height="52" rx="6" fill="#151b23" stroke="#e8a33d" stroke-width="2.4"/>
+    <rect x="1160" y="664" width="52" height="52" rx="6" fill="#151b23" stroke="#5b6b7c" stroke-width="2.4"/>
+  </g>
+
+  <!-- the ground both paths end at -->
+  <g stroke="#4a5a68" stroke-width="2.4" fill="none" opacity="0.8">
+    <path d="M1380 400 L1380 720"/>
+    <path d="M1380 400 L1420 370"/>
+    <path d="M1380 480 L1420 450"/>
+    <path d="M1380 560 L1420 530"/>
+    <path d="M1380 640 L1420 610"/>
+    <path d="M1380 720 L1420 690"/>
+  </g>
+</svg>

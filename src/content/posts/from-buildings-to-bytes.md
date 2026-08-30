@@ -3,12 +3,10 @@ title: "From Buildings to Bytes: A Structural Engineer's Route to AI-Native Tech
 description: "How a detour through civil engineering (load paths, safety factors, failure modes) still shapes the way I build software and lead teams 25 years on."
 date: "2026-07-08"
 readTime: "6 min read"
-image: "/assets/images/posts/post2.jpg"
+image: "/assets/images/posts/from-buildings-to-bytes/hero.svg"
 slug: "from-buildings-to-bytes"
 draft: false
 ---
-
-# From Buildings to Bytes: A Structural Engineer's Route to AI-Native Tech Lead
 
 I didn't start in software. I started as a civil engineer, designing buildings where the failure mode isn't a stack trace, it's people.
 

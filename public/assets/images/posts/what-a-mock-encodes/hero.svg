@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="A solid object beside a wireframe copy of it that is subtly offset and missing an edge, with the mismatch marked">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#1a2029" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="vignette" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1318"/>
+      <stop offset="1" stop-color="#0a0d11"/>
+    </linearGradient>
+    <linearGradient id="solidface" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#28323e"/>
+      <stop offset="1" stop-color="#1a222b"/>
+    </linearGradient>
+    <filter id="cyanglow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="amberglow" x="-300%" y="-300%" width="700%" height="700%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#vignette)"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity="0.55"/>
+
+  <!-- the real thing: solid, precise, closed -->
+  <g>
+    <rect x="286" y="250" width="356" height="400" rx="8" fill="url(#solidface)" stroke="#4a5a68" stroke-width="2"/>
+    <line x1="286" y1="316" x2="642" y2="316" stroke="#5b6b7c" stroke-width="1.6"/>
+    <g fill="#5b6b7c" opacity="0.8">
+      <rect x="322" y="356" width="196" height="8" rx="4"/>
+      <rect x="322" y="392" width="140" height="8" rx="4"/>
+      <rect x="322" y="428" width="258" height="8" rx="4"/>
+      <rect x="322" y="464" width="176" height="8" rx="4"/>
+      <rect x="322" y="500" width="228" height="8" rx="4"/>
+      <rect x="322" y="536" width="124" height="8" rx="4"/>
+      <rect x="322" y="572" width="200" height="8" rx="4"/>
+    </g>
+  </g>
+
+  <!-- the copy I wrote: same shape, offset, and one edge simply absent -->
+  <g filter="url(#cyanglow)" fill="none" stroke="#6fc7d6" stroke-width="2" stroke-dasharray="10 7" opacity="0.95">
+    <path d="M714 283 L1070 283"/>
+    <path d="M1070 283 L1070 683"/>
+    <path d="M1070 683 L714 683"/>
+    <!-- the fourth edge is missing on purpose -->
+  </g>
+  <g fill="none" stroke="#6fc7d6" stroke-width="1.5" stroke-dasharray="7 6" opacity="0.55">
+    <path d="M714 349 L1070 349"/>
+  </g>
+  <g fill="#6fc7d6" opacity="0.5">
+    <rect x="750" y="389" width="196" height="8" rx="4"/>
+    <rect x="750" y="425" width="140" height="8" rx="4"/>
+    <rect x="750" y="461" width="258" height="8" rx="4"/>
+    <rect x="750" y="497" width="176" height="8" rx="4"/>
+    <rect x="750" y="533" width="228" height="8" rx="4"/>
+    <rect x="750" y="569" width="124" height="8" rx="4"/>
+    <rect x="750" y="605" width="200" height="8" rx="4"/>
+  </g>
+
+  <!-- where the two fail to meet -->
+  <g stroke="#e8a33d" stroke-width="2" fill="none" filter="url(#amberglow)">
+    <path d="M642 250 L714 283"/>
+    <path d="M642 650 L714 683"/>
+  </g>
+  <g stroke="#e8a33d" stroke-width="1.6" fill="none" opacity="0.9">
+    <path d="M714 683 L714 745"/>
+    <path d="M700 745 L728 745"/>
+  </g>
+  <circle cx="714" cy="683" r="6" fill="#e8a33d" filter="url(#amberglow)"/>
+</svg>

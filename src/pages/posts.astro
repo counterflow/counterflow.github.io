@@ -2,11 +2,13 @@
 import BaseHead from "../components/BaseHead.astro";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
-import { getAllPosts } from "../utils/getPosts";
+import { getPostListEntries } from "../utils/getPosts";
 
 const POSTS_PER_PAGE = 5;
 
-const allPosts = getAllPosts();
+// A multi-part series collapses to a single row, so one long article can't
+// push everything else off page one.
+const allPosts = getPostListEntries();
 
 const postsData = JSON.stringify(allPosts);
 ---
@@ -82,8 +84,30 @@ const postsData = JSON.stringify(allPosts);
           if (!postsContainer) return;
 
           postsContainer.innerHTML = postsToShow
-            .map(
-              (post) => `
+            .map((post) => {
+              const isSeries = post.kind === "series";
+
+              const badge = isSeries
+                ? `<span class="inline-flex items-center rounded-full border border-dashed border-neutral-300 dark:border-neutral-600 px-2.5 py-0.5 mb-3 text-xs font-medium text-neutral-600 dark:text-neutral-400">
+                     Series · ${post.partsTotal} part${post.partsTotal === 1 ? "" : "s"}
+                   </span>`
+                : "";
+
+              const partLinks = isSeries
+                ? `<ol class="mt-4 flex flex-col gap-1.5 border-l border-dashed border-neutral-300 dark:border-neutral-700 pl-4">
+                     ${post.parts
+                       .map(
+                         (part, i) => `
+                       <li class="text-sm text-neutral-600 dark:text-neutral-400">
+                         <span class="text-neutral-500 dark:text-neutral-500">${part.part ?? i + 1}.</span>
+                         <span class="ml-1">${part.title}</span>
+                       </li>`
+                       )
+                       .join("")}
+                   </ol>`
+                : "";
+
+              return `
             <a href="${post.href}">
               <div
                 class="relative border border-transparent border-dashed cursor-pointer p-7 group rounded-2xl"
@@ -105,6 +129,7 @@ const postsData = JSON.stringify(allPosts);
                 >
                   <div class="flex gap-8">
                     <div class="flex-[2]">
+                      ${badge}
                       <h2 class="relative mb-4 pr-6">
                         <span
                           class="text-lg font-bold leading-tight tracking-tight sm:text-xl lg:text-2xl text-neutral-900 dark:text-neutral-100"
@@ -153,7 +178,7 @@ const postsData = JSON.stringify(allPosts);
                       <div
                         class="flex items-center gap-4 text-sm font-medium text-neutral-600 dark:text-neutral-400"
                       >
-                        <span>Posted on ${post.date}</span>
+                        <span>${isSeries ? "Latest" : "Posted on"} ${post.date}</span>
                         <span class="flex items-center">
                           <svg
                             class="w-4 h-4 mr-1"
@@ -171,6 +196,7 @@ const postsData = JSON.stringify(allPosts);
                           ${post.readTime}
                         </span>
                       </div>
+                      ${partLinks}
                     </div>
                     <div
                       class="relative flex-1 h-48 rounded-xl overflow-hidden flex-shrink-0"
@@ -185,8 +211,8 @@ const postsData = JSON.stringify(allPosts);
                 </div>
               </div>
             </a>
-          `
-            )
+          `;
+            })
             .join("");
         }
 
