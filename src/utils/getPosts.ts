@@ -1,5 +1,10 @@
 export interface PostFrontmatter {
   title?: string;
+  /**
+   * Deck line under the title. Frames what the piece is really arguing when
+   * the title is deliberately narrow. Falls back to `description` when unset.
+   */
+  subtitle?: string;
   description?: string;
   date?: string;
   readTime?: string;
@@ -23,6 +28,7 @@ const allMarkdownModules = import.meta.glob<{
 
 export interface Post {
   title: string;
+  subtitle: string | null;
   description: string;
   date: string;
   readTime: string;
@@ -80,6 +86,7 @@ function toPost(filePath: string, frontmatter: PostFrontmatter): Post | null {
 
   return {
     title: frontmatter.title || '',
+    subtitle: frontmatter.subtitle || null,
     description: frontmatter.description || '',
     date: frontmatter.date || '',
     readTime: frontmatter.readTime || '5 min read',

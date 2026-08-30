@@ -226,9 +226,9 @@ const jsonLd = {
         </header>
 
         {
-          frontmatter.description && (
+          (frontmatter.subtitle || frontmatter.description) && (
             <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-16 text-center">
-              {frontmatter.description}
+              {frontmatter.subtitle || frontmatter.description}
             </p>
           )
         }

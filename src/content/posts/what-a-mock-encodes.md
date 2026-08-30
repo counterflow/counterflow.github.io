@@ -1,5 +1,6 @@
 ---
 title: "A mock encodes what you believe, not what it does"
+subtitle: "Testing the external systems an agent runtime depends on"
 description: "A mock at a boundary you don't own tests your beliefs, not the system. How I test a tmux client instead, and why every agent dependency has this problem."
 date: "2026-08-30"
 readTime: "11 min read"

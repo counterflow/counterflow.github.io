@@ -12,8 +12,9 @@ than shipping a broken page.
 
 ```yaml
 ---
-title: "From Buildings to Bytes: A Structural Engineer's Route to AI-Native Tech Lead"
-description: "How a detour through civil engineering still shapes the way I build software 25 years on."
+title: "I didn't write a daemon, and here's what that bought me"
+subtitle: "What supervising a long-running coding agent taught me about agent infrastructure"
+description: "Process supervision asks whether the worker is healthy. Agent supervision asks whether the work is healthy. Why a long-running agent went in tmux."
 date: "2026-07-08"
 readTime: "6 min read"
 image: "/assets/images/posts/from-buildings-to-bytes/hero.webp"
@@ -25,6 +26,7 @@ draft: false
 | Key | Required | Notes |
 |---|---|---|
 | `title` | yes | Rendered in `<h1>`, `<title>`, and OG title |
+| `subtitle` | no | Deck line under the title on the post page. Use when the title is deliberately narrow or contrarian and the piece is arguing something broader: the title earns the click, the subtitle says what the argument actually is. Not used on cards or in OG, so it can be plainer than `description`. When set it **replaces** `description` in the lead position, so don't write the same sentence twice |
 | `description` | yes | Index card, meta description, OG description. One or two sentences, **under 160 chars** or search results truncate it |
 | `date` | yes | Quoted `YYYY-MM-DD`. Drives sort order *and* `schema.org` `datePublished`. Must be a real calendar date |
 | `readTime` | yes | Free text. **Compute it** — words ÷ 200, rounded up. Don't invent it |

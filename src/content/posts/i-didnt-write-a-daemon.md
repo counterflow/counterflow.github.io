@@ -1,5 +1,6 @@
 ---
 title: "I didn't write a daemon, and here's what that bought me"
+subtitle: "What supervising a long-running coding agent taught me about agent infrastructure"
 description: "Process supervision asks whether the worker is healthy. Agent supervision asks whether the work is healthy. Why a long-running agent went in tmux."
 date: "2026-08-30"
 readTime: "10 min read"
