@@ -1,8 +1,8 @@
 ---
 title: "I didn't write a daemon, and here's what that bought me"
-description: "A supervisor tells me an agent is alive, not that it's doing the right thing. Why I put a long-running agent in tmux, and what that cost."
+description: "Process supervision asks whether the worker is healthy. Agent supervision asks whether the work is healthy. Why a long-running agent went in tmux."
 date: "2026-08-30"
-readTime: "8 min read"
+readTime: "10 min read"
 image: "/assets/images/posts/i-didnt-write-a-daemon/hero.svg"
 slug: "i-didnt-write-a-daemon"
 series: "somewhere-to-put-an-agent"
@@ -38,6 +38,8 @@ The process is healthy. Memory is flat. The exit code hasn't happened yet. Every
 
 Logs don't close that gap either, because a log is a reconstruction assembled out of whatever I thought to record in advance. It answers the questions I had before the run started, which are not the questions I have during it. And even when it answers one of them well, I can't intervene in a log.
 
+To be fair to the daemon, none of that is a hard limit of the tooling. I could have the agent report its own state through `sd_notify`, emit structured telemetry, or expose a socket that answers questions about what it is currently doing. That is the right answer eventually, and it is a better one than mine. It also means building all of it first, on top of an agent I hadn't finished, to find out whether the thing was worth finishing.
+
 ```mermaid
 flowchart LR
   S["Supervisor<br/>after the fact, binary"] -.->|"exit status,<br/>restart count"| A["Agent process<br/>hours of work"]
@@ -72,6 +74,8 @@ The first thing I published here was about [safety factors](/posts/from-building
 
 A tmux pane gives me no isolation, no resource limits and no cgroup. If the agent decides to fill the disk, nothing in my chosen substrate stands between it and the machine. A container wins this outright and it isn't close.
 
+Which is worth saying plainly, because these don't actually compete. A container on the outside and tmux on the inside gets me kernel-enforced limits and a pane I can attach to, and that is very likely where this ends up. I didn't start there because a container wrapped around an unfinished tool is a deployment story, and I'd have spent my evenings debugging that instead of the question I was trying to answer.
+
 Version skew is the second line on the invoice, and it is specific rather than superstitious. Control mode itself has been moving: 3.2 added pausing for slow control clients, 3.4 fixed control clients hanging on exit when pty data was still queued, and 3.5 fixed another hang after toggling no-output. Those are precisely the paths anything driving tmux as an API spends its life on.
 
 The gaps between those releases matter as much as the changes in them. 3.2a shipped on 10 June 2021 and 3.4 shipped on 13 February 2024. That is two years and eight months during which the ground moved, and any given remote box can be sitting anywhere in that window.
@@ -79,6 +83,26 @@ The gaps between those releases matter as much as the changes in them. 3.2a ship
 Then there is Windows, which is a structural absence rather than a to-do item. Native support was [requested in October 2019](https://github.com/tmux/tmux/issues/1954) and never landed. [wmux](https://www.wmux.app/en) went the other way entirely and talks to ConPTY directly rather than accept the limitation, which is the strongest evidence available that this is a trade at all: somebody competent looked at the same wall and made the opposite call.
 
 **None of this is a free win.** I am driving a tool built for a person at a keyboard, and control mode is a narrow door cut into the side of it for programs. I picked the door for what is on the other side, not because the door is wide.
+
+## This was never really about tmux
+
+Set out like that, the daemon starts to look like the wrong argument to have been having. systemd is an excellent process supervisor and I was never going to beat it at that. I had spent a week comparing tools inside a category that didn't contain the thing I needed.
+
+Process supervision asks whether the worker is healthy. Agent supervision asks whether the work is healthy. **Almost everything I reached for answers the first question exhaustively and the second one not at all.**
+
+```mermaid
+flowchart LR
+  P["Process supervision"] --> P1["is it alive?"]
+  P --> P2["what was the exit status?"]
+  P --> P3["how much memory?"]
+  A["Agent supervision"] --> A1["what is it doing?"]
+  A --> A2["is it making progress?"]
+  A --> A3["should I step in?"]
+```
+
+tmux does not answer the second column either. What it does is refuse to throw away the evidence. A terminal agent already narrates its reasoning, its tool calls and its wrong turns into a pane, so the semantic state exists whether or not anything is designed to carry it, and a pane is a thing I can attach to.
+
+So this is a bootstrap rather than a destination. The honest version is that I picked the cheapest substrate that preserves what I need to see, and the real answer is an agent that reports what it's doing in a form I can query, rather than one I read over the shoulder of.
 
 ## Choosing the substrate forced a library
 
@@ -91,5 +115,7 @@ The failures I hit were the ordinary ones, which is what makes them worth naming
 So the launcher I'm building acquired a dependency it didn't ask for, which is [gotmucks](/projects/gotmucks), a Go client that speaks control mode and addresses everything by identifier. The library, predictably, was the more interesting problem, and it has got further than the thing it exists for.
 
 That leaves one thing, and it is what part two is about. A library whose entire job is driving somebody else's process has a testing problem, and the standard Go answer to it turns out to be wrong in a way that is worth taking apart.
+
+I didn't skip the daemon because tmux supervises better. It doesn't, and I had simply misidentified the thing that needed supervising.
 
 The agent still runs for hours on a machine I'm not looking at. The difference is that now I can look.

@@ -1,15 +1,15 @@
 ---
 title: "A mock encodes what you believe, not what it does"
-description: "Mocking a process you don't own tests your own beliefs back at yourself. What I test a tmux client with instead, and what that still cannot catch."
+description: "A mock at a boundary you don't own tests your beliefs, not the system. How I test a tmux client instead, and why every agent dependency has this problem."
 date: "2026-08-30"
-readTime: "10 min read"
+readTime: "11 min read"
 image: "/assets/images/posts/what-a-mock-encodes/hero.svg"
 slug: "what-a-mock-encodes"
 series: "somewhere-to-put-an-agent"
 seriesTitle: "Somewhere to Put an Agent"
 part: 2
 partsTotal: 2
-draft: true
+draft: false
 ---
 
 I have roughly 9,900 lines of test code standing against roughly 7,300 lines of library, and not one of them is a mock.
@@ -148,5 +148,15 @@ flowchart LR
   I["go test -tags integration ./..."] -->|catches| I1["protocol reality<br/>version skew"]
   I -->|costs| I2["a tmux build<br/>per matrix entry"]
 ```
+
+## Every boundary an agent touches has this problem
+
+tmux is one dependency. The thing I'm building it for also touches a shell, a filesystem, git, a handful of HTTP APIs and eventually other agents, and every one of those is a program I didn't write and can't pin.
+
+Each of them arrives with two separate things: what it actually does, and what I believe it does. A suite assembled out of my own fakes exercises the second exhaustively and the first not at all. **That gap stays invisible for exactly as long as nobody goes and looks.**
+
+Which is the same shape as [part one](/posts/i-didnt-write-a-daemon), and I didn't notice that until both were written. There the mistake was watching the process instead of the work. Here it is testing the belief instead of the behaviour. Both are the same habit, which is checking the abstraction and then calling it the thing.
+
+So the probes aren't a tmux trick. They're the cheap version of a question worth asking at every boundary an agent runs across, which is not whether my code does what I meant, but whether the thing on the other side still does what I assumed.
 
 I went looking for somewhere to put an agent, and I found it. The rent is a test matrix.
