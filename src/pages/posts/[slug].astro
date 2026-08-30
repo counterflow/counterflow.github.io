@@ -186,7 +186,7 @@ const jsonLd = {
       <article
         class="relative z-20 mx-auto mt-24 mb-12 w-[calc(100%-2rem)] max-w-[896px] rounded-2xl border border-neutral-200/70 bg-neutral-100/85 px-6 py-10 shadow-xl shadow-neutral-900/5 backdrop-blur-sm sm:px-10 sm:py-12 lg:px-14 dark:border-neutral-700/60 dark:bg-neutral-800/75 dark:shadow-black/30"
       >
-        <header class="text-center">
+        <header class={`text-center ${frontmatter.subtitle ? "mb-16" : ""}`}>
           {
             seriesNav && (
               <a
@@ -206,6 +206,13 @@ const jsonLd = {
           >
             {frontmatter.title}
           </h1>
+          {
+            frontmatter.subtitle && (
+              <p class="mx-auto mb-4 max-w-2xl text-lg font-normal leading-snug text-neutral-500 dark:text-neutral-400 sm:text-xl">
+                {frontmatter.subtitle}
+              </p>
+            )
+          }
           <div
             class="flex items-center justify-center gap-4 text-sm text-neutral-600 dark:text-neutral-400 mb-1.5"
           >
@@ -226,9 +233,9 @@ const jsonLd = {
         </header>
 
         {
-          (frontmatter.subtitle || frontmatter.description) && (
+          !frontmatter.subtitle && frontmatter.description && (
             <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-16 text-center">
-              {frontmatter.subtitle || frontmatter.description}
+              {frontmatter.description}
             </p>
           )
         }
