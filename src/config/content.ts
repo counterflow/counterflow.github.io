@@ -35,7 +35,7 @@ export const aboutContent = {
   },
   title: "About Me",
   description:
-    "I'm a software engineer based in Auckland, New Zealand, who turns complex problems into clean, shippable software. I work across the full stack: modern web, cloud, and AI-native systems, building agentic workflows and tooling around Claude Code.",
+    "A principal-level software and AI systems engineer who combines deep application architecture and production engineering experience with AI-native development, production AI product engineering, agentic systems, evaluation, private/cloud inference and AI platform architecture.",
   skills: [
     "AI-Native Development",
     "TypeScript",
@@ -72,17 +72,17 @@ export const aboutContent = {
       },
       {
         period: "03",
-        position: "Headless Commerce & Integrations",
-        company: "Product config · Cart · Checkout · Payments · Webhooks · RBAC",
-        description:
-          "I deliver headless commerce and secure third-party integrations, including API key management, rate limiting, caching, and webhooks.",
-      },
-      {
-        period: "04",
         position: "Cloud, DevOps & Architecture",
         company: "Docker · Azure · CI/CD · Solution Architecture",
         description:
           "I architect and automate the path to production with containers, cloud infrastructure, and continuous delivery pipelines.",
+      },
+      {
+        period: "04",
+        position: "Agent Orchestration Platforms",
+        company: "Multi-agent orchestration · Supervision · Evaluation · Private & cloud inference",
+        description:
+          "I build the platform layer agents run on: long-running work orchestrated across models and tools, observable while it happens, and evaluated rather than taken on trust.",
       },
     ],
   },
