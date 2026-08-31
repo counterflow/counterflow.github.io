@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="gotmucks icon: a Go gopher head inside a terminal window with a tmux status line">
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1318"/>
+      <stop offset="1" stop-color="#0a0d11"/>
+    </linearGradient>
+    <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7fd3e2"/>
+      <stop offset="1" stop-color="#4fa8bd"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#1a2029" stroke-width="1"/>
+    </pattern>
+    <clipPath id="badgeClip"><rect width="512" height="512" rx="112"/></clipPath>
+    <clipPath id="windowClip"><rect x="56" y="56" width="400" height="400" rx="30"/></clipPath>
+    <filter id="softglow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <g clip-path="url(#badgeClip)">
+    <rect width="512" height="512" fill="url(#ground)"/>
+    <rect width="512" height="512" fill="url(#grid)" opacity="0.45"/>
+  </g>
+  <rect x="1.5" y="1.5" width="509" height="509" rx="110.5" fill="none" stroke="#33404f" stroke-width="3"/>
+
+  <rect x="56" y="56" width="400" height="400" rx="30" fill="#161b22" stroke="#33404f" stroke-width="2.5"/>
+
+  <g clip-path="url(#windowClip)">
+    <g fill="#2c3846">
+      <rect x="84" y="92" width="104" height="9" rx="4.5"/>
+      <rect x="84" y="114" width="68" height="9" rx="4.5"/>
+      <rect x="324" y="92" width="88" height="9" rx="4.5"/>
+      <rect x="324" y="114" width="52" height="9" rx="4.5"/>
+    </g>
+
+    <g fill="url(#fur)" stroke="#2f6b7a" stroke-width="3">
+      <circle cx="152" cy="176" r="44"/>
+      <circle cx="360" cy="176" r="44"/>
+    </g>
+    <path d="M112 300a144 148 0 0 1 288 0v112H112z" fill="url(#fur)" stroke="#2f6b7a" stroke-width="3"/>
+
+    <g fill="#f2f6f8">
+      <circle cx="196" cy="256" r="50"/>
+      <circle cx="316" cy="256" r="50"/>
+    </g>
+    <g fill="#12181f">
+      <circle cx="206" cy="262" r="21"/>
+      <circle cx="306" cy="262" r="21"/>
+    </g>
+    <g fill="#ffffff" opacity="0.9">
+      <circle cx="199" cy="254" r="6"/>
+      <circle cx="299" cy="254" r="6"/>
+    </g>
+
+    <ellipse cx="256" cy="330" rx="38" ry="26" fill="#f2f6f8"/>
+    <circle cx="256" cy="318" r="8" fill="#12181f"/>
+    <g fill="#ffffff" stroke="#c9d4da" stroke-width="1.5">
+      <rect x="243" y="336" width="12" height="26" rx="3"/>
+      <rect x="257" y="336" width="12" height="26" rx="3"/>
+    </g>
+
+    <rect x="56" y="410" width="400" height="46" fill="#e8a33d" opacity="0.14"/>
+    <rect x="56" y="410" width="400" height="2" fill="#e8a33d" opacity="0.45"/>
+    <rect x="82" y="425" width="62" height="16" rx="8" fill="#e8a33d" opacity="0.9"/>
+    <rect x="156" y="425" width="36" height="16" rx="8" fill="#4a5a68"/>
+    <rect x="368" y="425" width="62" height="16" rx="8" fill="#4a5a68" opacity="0.7"/>
+  </g>
+  <rect x="84" y="136" width="20" height="18" rx="3" fill="#e8a33d" filter="url(#softglow)"/>
+</svg>
