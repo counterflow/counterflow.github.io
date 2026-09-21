@@ -15,7 +15,7 @@ I didn't take it.
 
 My father wanted me to become a civil engineer, so I did. I went through the five-year course, graduated in 1997, passed the board exam, and eventually worked as a structural engineer.
 
-I wasn't one of those people who had dreamed of becoming a civil engineer since childhood. There were subjects I liked, especially steel design, water engineering, project management, and anything involving computers. There were also plenty that I didn't enjoy at all.
+I wasn't one of those people who had dreamed of becoming a civil engineer since childhood. There were subjects I liked, especially steel design, hydraulic engineering, project management, and anything involving computers. There were also plenty that I didn't enjoy at all.
 
 What I do remember clearly is how much I liked using computers to do engineering work.
 
@@ -69,7 +69,7 @@ I started looking seriously at generative AI around late 2022.
 
 At first it was mostly the same experience everyone had: ask ChatGPT something, copy the answer into an editor, try it, go back and ask another question.
 
-But I got interested quite quickly in what was happening underneath and around the models. I played with LangChain, LangSmith, RAG, AutoGPT and some of the other early agent experiments. From 2023 to 2025, I also did some on-and-off contract work on RLHF-style model evaluation and training tasks.
+But I got interested quite quickly in what was happening underneath and around the models. I played with LangChain, LangSmith, RAG, AutoGPT, BabyAGI and some of the other early agent experiments. From 2023 to 2025, I also did some on-and-off contract work on RLHF-style model evaluation and training tasks.
 
 That gave me a slightly different perspective. I wasn't only using the models; I had some exposure to how human feedback and evaluation affected the way they behaved.
 
@@ -107,7 +107,7 @@ Understanding what should change, what must stay the same, and how to know wheth
 
 That is probably why my interest has started moving toward things like agent evaluation, observability, RAG, and more structured ways of using AI in software development.
 
-I'm also experimenting more with local models using tools like Ollama, Qwen and OpenCode, which has pulled me toward the computing side of AI as well.
+I'm also experimenting more with local models like Qwen, run through tools like Ollama, Hermes Agent and OpenCode, which has pulled me toward the computing side of AI as well.
 
 I'm not sure yet where that part goes.
 
